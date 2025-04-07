@@ -66,12 +66,14 @@ services:
     image: nginx
     ports:
       - '80:80'
+      - '443:443'
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
       FRONTEND_PORT: ${FRONTEND_PORT}
       CUSTOM_HOST: ${CUSTOM_HOST}
     volumes:
     - ./nginx-proxy/default.conf:/etc/nginx/templates/default.conf.template
+    - /home/jaguar/ssl:/etc/ssl/asociacion
     depends_on:
       - web-ui
       - red-file
