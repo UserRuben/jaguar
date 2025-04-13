@@ -1,9 +1,8 @@
-version: '3.8'
+version: '3.8'  # <- Esta línea indica la versión del formato que estás usando de Docker Compose.
 
 services:
   db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql:8.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -19,6 +18,7 @@ services:
       retries: 3
     volumes:
       - mysql_data:/var/lib/mysql
+
   red-file:
     build:
       context: ./archivos-rojos
@@ -50,6 +50,7 @@ services:
     ports:
       - '${BACKEND_PORT}:${BACKEND_PORT}'
       - '${MAIL_PORT}:${MAIL_PORT}'
+
   web-ui:
     build:
       context: ./cabezas-de-jaguar
@@ -62,6 +63,7 @@ services:
       - ./.env:/app/.env
     ports:
       - '${FRONTEND_PORT}:${FRONTEND_PORT}'
+
   nginx:
     image: nginx
     ports:
@@ -72,8 +74,8 @@ services:
       FRONTEND_PORT: ${FRONTEND_PORT}
       CUSTOM_HOST: ${CUSTOM_HOST}
     volumes:
-    - ./nginx-proxy/default.conf:/etc/nginx/templates/default.conf.template
-    - /home/jaguar/ssl:/etc/ssl/asociacion
+      - ./nginx-proxy/default.conf:/etc/nginx/templates/default.conf.template
+      - ./ssl:/etc/ssl/asociacion
     depends_on:
       - web-ui
       - red-file
